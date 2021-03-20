@@ -26,6 +26,7 @@
 
 <script>
 import {mapMutations} from 'vuex';
+import axios from 'axios'
 
 export default {
   data() {
@@ -45,16 +46,12 @@ export default {
       if (this.loginForm.username === '' || this.loginForm.password === '') {
         _this.centerDialogVisible = true;
       } else {
-        this.axios({
-          method: 'post',
-          url: '/user/login',
-          data: _this.loginForm
-        }).then(res => {
+        axios.get('/Test',_this.loginForm).then(res => {
           console.log(res.data);
-          _this.userToken = 'Bearer ' + res.data.data.body.token;
-          // 将用户token保存到vuex中
-          _this.changeLogin({Authorization: _this.userToken});
-          _this.$router.push('/home');
+          // _this.userToken = 'Bearer ' + res.data.data.body.token;
+          // // 将用户token保存到vuex中
+          // _this.changeLogin({Authorization: _this.userToken});
+          // _this.$router.push('/home');
           alert('登陆成功');
         }).catch(error => {
           alert('账号或密码错误');
