@@ -41,7 +41,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['changeLogin']),
+    ...mapMutations(['setToken']),
     login() {
       // let _this = this;
       console.log(this.LoginForm);
