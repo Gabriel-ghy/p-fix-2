@@ -11,6 +11,6 @@ module.exports = {
         host: '0.0.0.0',
         port: 8080,
         https: false,
-        proxy: 'http://172.29.124.215:8081'
+        proxy: 'http://localhost:8081'
     }
 }
