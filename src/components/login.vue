@@ -1,8 +1,13 @@
 <template>
   <br>
   <el-card class="box-card">
+    <template #header>
+      <div class="card-header">
+        <span>先锋网络中心维修预约系统登录</span>
+      </div>
+    </template>
     <el-form ref="form">
-      <el-form-item label="用户名">
+      <el-form-item label="用户名 目前唯一用户名：yan 密码:1001">
         <el-input v-model="LoginForm.userid"></el-input>
       </el-form-item>
       <el-form-item label="密码">
@@ -86,9 +91,7 @@ export default {
                 this.setToken({token: res.data.token});    //store中的为token赋值方法
                 ElMessage('登录成功！')
                 this.$router.push('/');
-              }
-              else if(res.data.code === 0)
-              {
+              } else if (res.data.code === 0) {
                 ElMessage("用户名或密码错误！")
                 document.getElementById("img").src = '/api/CreateImageCode?d=' + new Date() * 1; //这里的图片是更换后的图片
                 this.LoginForm.inputImageCode = ''
@@ -108,7 +111,7 @@ export default {
             this.LoginForm.inputImageCode = ''
             this.LoginForm.password = ''
           }
-        }).catch(error2 =>{
+        }).catch(error2 => {
           ElMessage("请重试！")
           document.getElementById("img").src = '/api/CreateImageCode?d=' + new Date() * 1; //这里的图片是更换后的图片
           console.log(error2)

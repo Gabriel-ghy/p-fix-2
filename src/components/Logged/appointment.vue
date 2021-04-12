@@ -17,13 +17,13 @@
       <el-form-item label="QQ" prop="QQ" style="width: auto">
         <el-input v-model="appointmentForm.QQ"></el-input>
       </el-form-item>
-      <el-form-item label="校区" prop="school" >
+      <el-form-item label="校区" prop="schoolid" >
         <el-select v-model="appointmentForm.schoolid" placeholder="请选择校区" style="width: 100%">
           <el-option label="南湖校区" value="1"></el-option>
           <el-option label="浑南校区" value="2"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="地点及时间" prop="time" >
+      <el-form-item label="地点及时间" prop="fixtimeid" >
         <el-select v-model="appointmentForm.fixtimeid" placeholder="请选择时间" style="width: 100%">
           <el-option label="区域一" value="1"></el-option>
           <el-option label="区域二" value="2"></el-option>
@@ -32,7 +32,7 @@
       <el-form-item label="&nbsp;&nbsp;电脑型号" prop="model" style="width: auto">
         <el-input v-model="appointmentForm.model" placeholder="不清楚可不填"></el-input>
       </el-form-item>
-      <el-form-item label="电脑问题" prop="problem" >
+      <el-form-item label="电脑问题" prop="problemid" >
         <el-select v-model="appointmentForm.problemid" placeholder="请选择电脑出现的问题" style="width: 100%">
           <el-option label="开不了机" value="1"></el-option>
           <el-option label="清灰" value="2"></el-option>
@@ -42,11 +42,12 @@
           <el-option label="其他" value="6"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="&nbsp;&nbsp;问题描述" prop="problemDescribe" >
+      <el-form-item label="&nbsp;&nbsp;问题描述" prop="description" >
       <el-input type="textarea" :rows="2" placeholder="详细的描述有利于我们做好准备哦" v-model="appointmentForm.description"></el-input>
       </el-form-item>
       <el-form-item style="float: left">
         <el-button type="primary" @click="submitForm('appointmentForm')">提交</el-button>
+        <el-button @click="resetForm('appointmentForm')">重置</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -119,11 +120,15 @@ export default {
             console.log(error)
           })
           ElMessage('提交成功！')
+          this.resetForm('appointmentForm')
         } else {
           ElMessage('请按要求填写信息哦～')
           return false;
         }
       });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
     }
   }
 }
