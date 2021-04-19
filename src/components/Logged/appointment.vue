@@ -23,12 +23,11 @@
           <el-option label="浑南校区" value="2"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="地点及时间" prop="fixtimeid" >
-        <el-select v-model="appointmentForm.fixtimeid" placeholder="请选择时间" style="width: 100%">
-          <el-option label="区域一" value="1"></el-option>
-          <el-option label="区域二" value="2"></el-option>
-        </el-select>
+      <el-form-item label="日期" prop="fixdate" v-if="appointmentForm.schoolid!==''">
+        <el-date-picker v-model="appointmentForm.fixdate" type="date" placeholder="选择日期" style="width: 100%" :disabled-date="disabledDate">
+        </el-date-picker>
       </el-form-item>
+      <p id="information" v-if="fixdate!==''"></p>
       <el-form-item label="&nbsp;&nbsp;电脑型号" prop="model" style="width: auto">
         <el-input v-model="appointmentForm.model" placeholder="不清楚可不填"></el-input>
       </el-form-item>
@@ -61,11 +60,13 @@ import axios from "axios";
 export default {
   name: "appointment",
   data() {
+    let this_ = this
     return {
       centerDialogVisible:false,
       appointmentForm: {
         name: '',
-        fixtimeid: '',
+        // fixtimeid: '',
+        fixdate:'',
         phone:'',
         QQ:'',
         schoolid:'',
@@ -73,12 +74,13 @@ export default {
         problemid:'',
         description:''
       },
+      fixtimedata:'',
       rules: {
         name: [
           {required: true, message: '请输入您的姓名', trigger: 'blur'},
           {min: 2, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
         ],
-        fixtimeid: [
+        fixdate: [
           {required: true, message: '请选择时间', trigger: 'change'}
         ],
         schoolid: [
@@ -95,6 +97,22 @@ export default {
           {required: true, message: '请输入您的QQ', trigger: 'blur'},
           {min: 6, max: 10, message: '长度在 8 到 10 个字符', trigger: 'blur'}
         ]
+      },
+      disabledDate(time) {
+        if(time.getTime()>Date.now())
+        {
+          if(this_.appointmentForm.schoolid==="1")
+          { //南湖校区
+            console.log("111")
+            return !(time.getDay() === 1 || time.getDay() === 2 || time.getDay() === 4);
+          }
+          else if(this_.appointmentForm.schoolid==="2")
+          {
+            return !(time.getDay() === 0 || time.getDay() === 3);
+          }
+          // TODO: 这块依赖于前端的计算了，不便于修改维修日期，需要优化
+        }
+        else return true
       }
     }
   },
@@ -107,12 +125,12 @@ export default {
         if (valid) {
           axios.post("/api/Appointment",{
             'name': this.appointmentForm.name,
-            'fixtimeid': this.appointmentForm.fixtimeid,
             'phone':this.appointmentForm.phone,
             'qq':this.appointmentForm.QQ,
             'schoolid':this.appointmentForm.schoolid,
             'model':this.appointmentForm.model,
             'problemid':this.appointmentForm.problemid,
+            'fixdate':this.appointmentForm.fixdate,
             'description':this.appointmentForm.description
           }).then(r => {
             console.log(r.data)
@@ -130,6 +148,35 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+  },
+  watch:{
+    'appointmentForm.schoolid':{
+      handler: function(newval,oldVal) {
+        console.log(newval,oldVal)
+        if(newval!=='')
+        {
+            this.appointmentForm.fixdate = ''
+        }
+      },
+      deep: true
+    },
+    'appointmentForm.fixdate':{
+      handler: function(newval,oldVal) {
+        console.log(newval,oldVal)
+        // let this_ = this
+        if(newval!=='')
+          document.getElementById("information").innerHTML = "您的时间和地点是："+this.appointmentForm.fixdate.getFullYear()+"年"+(this.appointmentForm.fixdate.getMonth()+1)+"月"+this.appointmentForm.fixdate.getDate()+"日 "+this.fixtimedata.filter(function (_data){
+            return _data.weekdayid===newval.getDay()
+          })[0]["fixtimestring"]
+      }
+    }
+  },
+  mounted() {
+    axios.get("/api/GetFixTimes").then(r => { //获取维修时间信息
+      this.fixtimedata = r.data
+    }).catch(error => {
+      console.log(error)
+    })
   }
 }
 </script>
