@@ -6,7 +6,7 @@
         <span>先锋网络中心维修预约系统登录</span>
       </div>
     </template>
-    <el-form ref="form">
+    <el-form ref="form" label-position="top">
       <el-form-item label="用户名 目前唯一用户名：yan 密码:1001">
         <el-input v-model="LoginForm.userid"></el-input>
       </el-form-item>
@@ -46,31 +46,6 @@ export default {
 
   methods: {
     ...mapMutations(['setToken']),
-    // login() {  //已经弃用，下边的handleSubmit代替
-    //   console.log(this.LoginForm);
-    //   if (this.LoginForm.username === '' || this.LoginForm.password === '') {
-    //     ElMessage('用户名或密码为空！');
-    //   } else if (store.state.token) {
-    //     ElMessage('您已登录！')
-    //     this.$router.replace('/')
-    //   } else {
-    //     axios.post('/api/Login', {
-    //       "username": this.LoginForm.username,
-    //       "password": this.LoginForm.password
-    //     }).then(res => {
-    //       console.log(res.data);
-    //       if (res.data.code === 1) {
-    //         this.setToken({token: res.data.token});    //store中的为token赋值方法
-    //         this.$router.push('/');
-    //       }
-    //       ElMessage('登录成功！')
-    //       this.$router.replace('/')
-    //     }).catch(error => {
-    //       ElMessage('账号或密码错误！')
-    //       console.log(error);
-    //     });
-    //   }
-    // },
     handleSubmit() {
       if (this.LoginForm.userid === '' || this.LoginForm.password === '' || this.LoginForm.inputImageCode === '') {
         ElMessage('用户名或密码或验证码为空！');
@@ -88,8 +63,8 @@ export default {
             }).then(res => {
               console.log(res.data.token);
               if (res.data.code === 1) {
-                this.setToken({token: res.data.token});    //store中的为token赋值方法
-                ElMessage('登录成功！')
+                this.setToken(res.data);    //store中的为token赋值方法
+                ElMessage('登录成功！欢迎：'+localStorage.getItem('userid'))
                 this.$router.push('/');
               } else if (res.data.code === 0) {
                 ElMessage("用户名或密码错误！")

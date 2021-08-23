@@ -9,13 +9,17 @@ const store = createStore({
         token: localStorage.getItem('token') ? localStorage.getItem('token') : ''
     },
     mutations: {
-        setToken (token) {
-            this.state.token =token;
-            localStorage.setItem("token",token.token);     //存储token
+        setToken (state,tokens) {
+            state.token =tokens.token;
+            localStorage.setItem("token",tokens.token);     //存储token
+            localStorage.setItem("userid",tokens.userid);     //存储token
+            localStorage.setItem("username",tokens.username);     //存储token
         },
-        delToken () {
-            this.state.token = '';
+        delToken (state) {
+            state.token = '';
             localStorage.removeItem("token");    //删除token
+            localStorage.removeItem("userid");    //删除token
+            localStorage.removeItem("username");    //删除token
         }
     }
 })

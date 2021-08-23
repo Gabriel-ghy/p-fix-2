@@ -4,7 +4,7 @@
   <el-card class="box-card">
     <template #header>
     <div class="card-header">
-      <span>请填写你的预约信息哦～ （看到此界面之后，请先刷新一下，有个未解bug）</span>
+      <span>请填写你的预约信息哦～</span>
     </div>
       </template>
     <el-form label-position="left" :model="appointmentForm" :rules="rules" label-width="100px" class="demo-ruleForm" ref="appointmentForm">
@@ -21,6 +21,7 @@
         <el-select v-model="appointmentForm.schoolid" placeholder="请选择校区" style="width: 100%">
           <el-option label="南湖校区" value="1"></el-option>
           <el-option label="浑南校区" value="2"></el-option>
+          <!--TODO: 这一块应该从后端查询，直接在前端显示不利于后期修改-->
         </el-select>
       </el-form-item>
       <el-form-item label="日期" prop="fixdate" v-if="appointmentForm.schoolid!==''">
@@ -40,6 +41,7 @@
           <el-option label="更换硬件" value="5"></el-option>
           <el-option label="其他" value="6"></el-option>
         </el-select>
+        <!--TODO: 这一块应该从后端查询，直接在前端显示不利于后期修改-->
       </el-form-item>
       <el-form-item label="&nbsp;&nbsp;问题描述" prop="description" >
       <el-input type="textarea" :rows="2" placeholder="详细的描述有利于我们做好准备哦" v-model="appointmentForm.description"></el-input>
@@ -64,11 +66,11 @@ export default {
     return {
       centerDialogVisible:false,
       appointmentForm: {
-        name: '123',
+        name: '闫泽宇',
         // fixtimeid: '',
         fixdate:'',
-        phone:'12312312312',
-        QQ:'123123',
+        phone:'13028616232',
+        QQ:'1023464930',
         schoolid:'',
         model:'',
         problemid:'',
